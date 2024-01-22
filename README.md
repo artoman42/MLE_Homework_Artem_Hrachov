@@ -83,6 +83,10 @@ docker build -f ./training/Dockerfile --build-arg settings_name=settings.json -t
 ```bash
 docker run -dit training_image
 ```
+
+```bash
+docker run -v $(pwd)/models:/app/models training_image
+```
 Then, move the trained model from the directory inside the Docker container `/app/models` to the local machine using:
 ```bash
 docker cp <container_id>:/app/models/<model_name>.pickle ./models
