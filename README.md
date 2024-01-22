@@ -81,7 +81,7 @@ docker build -f ./training/Dockerfile --build-arg settings_name=settings.json -t
 ```
 - You may run the container with the following parameters to ensure that the trained model is here:
 ```bash
-docker run -it training_image /bin/bash
+docker run -dit training_image
 ```
 Then, move the trained model from the directory inside the Docker container `/app/models` to the local machine using:
 ```bash
@@ -110,7 +110,7 @@ docker run -v /path_to_your_local_model_directory:/app/models -v /path_to_your_i
 ```
 - Or you may run it with the attached terminal using the following command:
 ```bash
-docker run -it inference_image /bin/bash  
+docker run -dit inference_image  
 ```
 After that ensure that you have your results in the `results` directory in your inference container.
 
