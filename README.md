@@ -67,7 +67,7 @@ docker build -f ./training/Dockerfile --build-arg settings_name=settings.json -t
 ```bash
 docker run -dit training_image
 ```
-For moving model, you also need to create folder `models` on your machine manually.
+For moving model, you also need to create folder `models` on your machine manually(But if you run python script locally, it will be created automatically with python-script)..
 Then, move the trained model from the directory inside the Docker container `/app/models` to the local machine using:
 ```bash
 docker cp <container_id>:/app/models/<model_name>.keras ./models
@@ -98,7 +98,7 @@ docker run -v /path_to_your_local_model_directory:/app/models -v /path_to_your_i
 docker run -dit inference_image  
 ```
 After that ensure that you have your results in the `results` directory in your inference container.
-For moving results, you also need to create folder `models` on your machine manually.
+For moving results, you also need to create folder `results` on your machine manually(But if you run python script locally, it will be created automatically with python-script).
 Then, move the achieved results from the directory inside the Docker container `/app/results` to the local machine using:
 ```bash
 docker cp <container_id>:/app/results/<result_name>.csv ./results
