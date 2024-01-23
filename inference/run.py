@@ -2,20 +2,17 @@
 Script loads the latest trained model, data for inference and predicts results.
 Imports necessary packages and modules.
 """
+import time
 import numpy as np
 import argparse
 import json
 import logging
 import os
-import pickle
 import sys
 from datetime import datetime
-from typing import List
-import keras
 import tensorflow as tf
 from tensorflow.keras.models import Model
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
 
 # Adds the root directory to system path
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -76,21 +73,16 @@ def get_inference_data(path: str) -> pd.DataFrame:
         sys.exit(1)
         
 def map_one_hot_to_descriptive_labels(one_hot_predictions, class_names=['0','1','2']):
-    """
-    Maps one-hot encoded predictions to descriptive class labels.
-
-    Parameters:
-    - one_hot_predictions: List or numpy array representing one-hot encoded predictions.
-    - class_names: List of descriptive class names corresponding to the classes.
-
-    Returns:
-    - List of descriptive class labels corresponding to the input predictions.
-    """
+    """Maps one-hot encoded predictions to descriptive class labels."""
     return [class_names[np.argmax(prediction)] for prediction in one_hot_predictions]
 
 def predict_results(model: Model, infer_data: pd.DataFrame) -> pd.DataFrame:
     """Predict de results and join it with the infer_data"""
+    logging.info(f"Inference data shape - {infer_data.shape}")
+    start_time = time.time()
     results = model.predict(infer_data)
+    end_time = time.time()
+    logging.info(f"Inference completed in {end_time - start_time} seconds.")
     infer_data['results'] = map_one_hot_to_descriptive_labels(results)
     return infer_data
 

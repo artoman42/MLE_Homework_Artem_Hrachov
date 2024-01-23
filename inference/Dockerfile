@@ -2,7 +2,7 @@
 # Start from a base Python image
 FROM python:3.10
 
-ARG model_name=prod_model.pickle
+ARG model_name=prod_model.h5
 ARG settings_name=settings.json
 ENV CONF_PATH=${settings_name}
 
@@ -12,7 +12,7 @@ WORKDIR /app
 COPY data/ /app/data
 
 # Copy models folder to Docker
-COPY models/${model_name} /app/models/${model_name}.pickle
+COPY models/${model_name} /app/models/${model_name}
 
 # Copy the code itself
 COPY inference /app/inference

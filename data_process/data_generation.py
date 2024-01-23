@@ -1,3 +1,7 @@
+'''
+Script to upload and split data for training and inference
+'''
+
 # Importing required libraries
 import numpy as np
 import pandas as pd
@@ -21,7 +25,7 @@ if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
 # Change to CONF_FILE = "settings.json" if you have problems with env variables
-CONF_FILE = "settings.json"
+CONF_FILE = os.getenv('CONF_PATH')
 
 # Load configuration settings from JSON
 logger.info("Loading configuration settings from JSON...")

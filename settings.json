@@ -21,6 +21,6 @@
     },
     "inference": {
         "inp_table_name": "iris_inference_data.csv",
-        "model_name": "prod_model.pickle" 
+        "model_name": "prod_model.h5" 
     }
 }

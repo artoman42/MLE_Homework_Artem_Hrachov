@@ -39,8 +39,8 @@ class TestTraining(unittest.TestCase):
             'x2': [1, 1, 0, 0]
         })
         y_train = pd.Series([0, 1, 1, 0])
-        tr.train(X_train, y_train)
-        self.assertIsNotNone(tr.model.tree_)
+        tr.train_model(X_train, y_train)
+        self.assertIsNotNone(tr.model)
 
 
 if __name__ == '__main__':

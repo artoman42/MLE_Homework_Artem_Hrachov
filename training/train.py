@@ -5,7 +5,6 @@ This script prepares the data, runs the training, and saves the model.
 import argparse
 import os
 import sys
-import pickle
 import json
 import logging
 import pandas as pd
@@ -14,11 +13,6 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 from datetime import datetime
 from sklearn.model_selection import train_test_split
-
-
-# Comment this lines if you have problems with MLFlow installation
-# import mlflow
-# mlflow.autolog()
 
 # Adds the root directory to system path
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -105,6 +99,8 @@ class Training():
         logging.info("Splitting data into training and test sets...")
         X_train, X_test, y_train, y_test = train_test_split(df.drop(columns=['target']), df['target'], test_size=test_size, 
                                 random_state=conf['general']['random_state'])
+        logging.info(f"Train dataset shape: ({X_train.shape[0]}, {X_train.shape[1] + 1}).")
+        logging.info(f"Validation dataset shape: ({X_test.shape[0]},{X_test.shape[1] + 1})")
         logging.info("Transforming target to one-hot...")
         y_train_one_hot = tf.keras.utils.to_categorical(y_train, num_classes=self.num_classes)
         y_test_one_hot =  tf.keras.utils.to_categorical(y_test, num_classes=self.num_classes)
@@ -120,7 +116,7 @@ class Training():
     def test(self, X_test: pd.DataFrame, y_test: pd.DataFrame) -> float:
         logging.info("Testing the model...")
         loss, acc =self.model.evaluate(X_test, y_test) 
-        logging.info(f" Accuracy:{acc}, loss: {loss}")
+        logging.info(f"Validation Accuracy: {acc}, loss: {loss}")
         return acc, loss
 
     def save(self, path: str) -> None:
