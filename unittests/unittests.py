@@ -6,6 +6,7 @@ import json
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(ROOT_DIR))
+# Change to CONF_FILE = "settings.json" if you have problems with env variables
 CONF_FILE = os.getenv('CONF_PATH')
 
 from training.train import DataProcessor, Training 
@@ -26,19 +27,21 @@ class TestDataProcessor(unittest.TestCase):
 
     def test_prepare_data(self):
         dp = DataProcessor()
-        df = dp.prepare_data(100)
-        self.assertEqual(df.shape[0], 100)
+        df = dp.prepare_data(150)
+        self.assertEqual(df.shape[0], 150)
 
 
 class TestTraining(unittest.TestCase):
     def test_train(self):
         tr = Training()
-        # assume you have some prepared data
+        
         X_train = pd.DataFrame({
-            'x1': [1, 0, 1, 0],
-            'x2': [1, 1, 0, 0]
+            'sepal length (cm)': [5.1, 4.9, 4.7],
+            'sepal width (cm)': [3.5, 3.0, 3.2],
+            'petal length (cm)':[1.4, 1.4, 1.3],
+            'petal width (cm)':[0.2, 0.2, 0.2]
         })
-        y_train = pd.Series([0, 1, 1, 0])
+        y_train = pd.Series([0, 1, 2])
         tr.train_model(X_train, y_train)
         self.assertIsNotNone(tr.model)
 
