@@ -125,7 +125,7 @@ class Training():
             os.makedirs(MODEL_DIR)
 
         if not path:
-            path = os.path.join(MODEL_DIR, datetime.now().strftime(conf['general']['datetime_format']) + '.h5')
+            path = os.path.join(MODEL_DIR, datetime.now().strftime(conf['general']['datetime_format']) + '.keras')
         else:
             path = os.path.join(MODEL_DIR, path)
         logging.info(f"{path}")

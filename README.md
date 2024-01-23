@@ -70,14 +70,14 @@ docker run -dit training_image
 For moving model, you also need to create folder `models` on your machine manually.
 Then, move the trained model from the directory inside the Docker container `/app/models` to the local machine using:
 ```bash
-docker cp <container_id>:/app/models/<model_name>.h5 ./models
+docker cp <container_id>:/app/models/<model_name>.keras ./models
 ```
-Replace `<container_id>` with your running Docker container ID and `<model_name>.h5` with your model's name.
+Replace `<container_id>` with your running Docker container ID and `<model_name>.keras` with your model's name.
 
 1. Alternatively, the `train.py` script can also be run locally as follows:
 
 ```bash
-python3 training/train.py
+python training/train.py
 ```
 
 ## Inference:
@@ -87,7 +87,7 @@ Once a model has been trained, it can be used to make predictions on new data in
 
 - Build the inference Docker image:
 ```bash
-docker build -f ./inference/Dockerfile --build-arg model_name=<model_name>.h5 --build-arg settings_name=settings.json -t inference_image .
+docker build -f ./inference/Dockerfile --build-arg model_name=<model_name>.keras --build-arg settings_name=settings.json -t inference_image .
 ```
 - Run the inference Docker container:
 ```bash
