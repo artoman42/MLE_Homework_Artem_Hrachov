@@ -35,7 +35,7 @@ MLE_basic_example
 │   └── __init__.py
 ├── models                    # Folder where trained models are stored
 │   └── various model files
-├── models                    # Folder where results of inference are stored
+├── results                    # Folder where results of inference are stored
 │   └── various results files
 ├── training                  # Scripts and Dockerfiles used for training
 │   ├── Dockerfile
