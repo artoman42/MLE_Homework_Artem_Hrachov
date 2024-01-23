@@ -4,14 +4,17 @@ __pycache__/
 .vscode
 
 # Directories
-models/
-results/
 mlruns/
 
 # File Extensions
 *.pickle
+*.keras
+*.h5
 *.pyc
-
+*.csv
+# Data Files
+!iris_inference_data.csv
+!iris_train_data.csv
 # Environment Variables
 .env
 

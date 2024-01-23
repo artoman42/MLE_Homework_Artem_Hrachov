@@ -2,7 +2,7 @@
 Script loads the latest trained model, data for inference and predicts results.
 Imports necessary packages and modules.
 """
-
+import numpy as np
 import argparse
 import json
 import logging
@@ -11,7 +11,9 @@ import pickle
 import sys
 from datetime import datetime
 from typing import List
-
+import keras
+import tensorflow as tf
+from tensorflow.keras.models import Model
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 
@@ -20,7 +22,7 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(ROOT_DIR))
 
 # Change to CONF_FILE = "settings.json" if you have problems with env variables
-CONF_FILE = os.getenv('CONF_PATH')
+CONF_FILE = "settings.json"
 
 from utils import get_project_dir, configure_logging
 
@@ -47,19 +49,18 @@ def get_latest_model_path() -> str:
     latest = None
     for (dirpath, dirnames, filenames) in os.walk(MODEL_DIR):
         for filename in filenames:
-            if not latest or datetime.strptime(latest, conf['general']['datetime_format'] + '.pickle') < \
-                    datetime.strptime(filename, conf['general']['datetime_format'] + '.pickle'):
+            if not latest or datetime.strptime(latest, conf['general']['datetime_format'] + '.h5') < \
+                    datetime.strptime(filename, conf['general']['datetime_format'] + '.h5'):
                 latest = filename
     return os.path.join(MODEL_DIR, latest)
 
 
-def get_model_by_path(path: str) -> DecisionTreeClassifier:
+def get_model_by_path(path: str) -> Model:
     """Loads and returns the specified model"""
     try:
-        with open(path, 'rb') as f:
-            model = pickle.load(f)
-            logging.info(f'Path of the model: {path}')
-            return model
+        model = tf.keras.models.load_model(path)
+        logging.info(f'Path of the model: {path}')
+        return model
     except Exception as e:
         logging.error(f'An error occurred while loading the model: {e}')
         sys.exit(1)
@@ -73,12 +74,24 @@ def get_inference_data(path: str) -> pd.DataFrame:
     except Exception as e:
         logging.error(f"An error occurred while loading inference data: {e}")
         sys.exit(1)
+        
+def map_one_hot_to_descriptive_labels(one_hot_predictions, class_names=['0','1','2']):
+    """
+    Maps one-hot encoded predictions to descriptive class labels.
 
+    Parameters:
+    - one_hot_predictions: List or numpy array representing one-hot encoded predictions.
+    - class_names: List of descriptive class names corresponding to the classes.
 
-def predict_results(model: DecisionTreeClassifier, infer_data: pd.DataFrame) -> pd.DataFrame:
+    Returns:
+    - List of descriptive class labels corresponding to the input predictions.
+    """
+    return [class_names[np.argmax(prediction)] for prediction in one_hot_predictions]
+
+def predict_results(model: Model, infer_data: pd.DataFrame) -> pd.DataFrame:
     """Predict de results and join it with the infer_data"""
     results = model.predict(infer_data)
-    infer_data['results'] = results
+    infer_data['results'] = map_one_hot_to_descriptive_labels(results)
     return infer_data
 
 

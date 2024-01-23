@@ -13,9 +13,8 @@ import time
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from datetime import datetime
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score
+
 
 # Comment this lines if you have problems with MLFlow installation
 # import mlflow
@@ -117,10 +116,7 @@ class Training():
                                  validation_data=(X_val, y_val),
                                  epochs=epochs, batch_size=batch_size)
         return history
-    def train(self, X_train: pd.DataFrame, y_train: pd.DataFrame) -> None:
-        logging.info("Training the model...")
-        self.model.fit(X_train, y_train)
-
+    
     def test(self, X_test: pd.DataFrame, y_test: pd.DataFrame) -> float:
         logging.info("Testing the model...")
         loss, acc =self.model.evaluate(X_test, y_test) 
@@ -133,7 +129,7 @@ class Training():
             os.makedirs(MODEL_DIR)
 
         if not path:
-            path = os.path.join(MODEL_DIR, datetime.now().strftime(conf['general']['datetime_format']) + '.keras')
+            path = os.path.join(MODEL_DIR, datetime.now().strftime(conf['general']['datetime_format']) + '.h5')
         else:
             path = os.path.join(MODEL_DIR, path)
         logging.info(f"{path}")
